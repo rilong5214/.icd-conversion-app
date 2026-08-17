@@ -1,63 +1,87 @@
-# .icd-conversion-app
+# ICD Converter
 
-.icad → STEP (.stp), Parasolid 変換ツール  
-A lightweight utility to convert `.icd` CAD files into `.stp` (STEP) or Parasolid formats.
+iCAD SXの付属変換プログラムを、Windows 11に合わせたデスクトップUIから実行するファイル変換・ランチャーアプリです。
 
-![screenshot](https://github.com/user-attachments/assets/81024dab-d8bc-42a3-8c64-21dcea79f0c3)
+UIと変換制御はC#、Avalonia 12.1、.NET 8で実装されています。配布されている`ICDConverter.exe`はWindows x64向けの自己完結型単一EXEで、Python、`EXE.bat`、別途インストールした.NETランタイムは必要ありません。
 
----
+## 動作条件
 
-## ✨ 機能 / Features
+- 対応OS: Windows 10 / Windows 11（64ビット）
+- iCAD SXがインストールされていること
+- PDF変換を使用する場合は、PDFCreatorのAutoSave設定が完了していること
 
-- 変換モードを選択可能（STEPまたはParasolid）  
-  Choose between STEP (.stp) or Parasolid format.
-- `.icd`ファイルをドラッグ・アンド・ドロップで読み込み可能  
-  Drag and drop `.icd` files for easy loading.
-- 出力先フォルダを選択し「変換」ボタンをクリックで変換開始  
-  Select an output folder and click "Convert" to start conversion.
-- デフォルトでは、出力ファイルは元の`.icd`ファイルと同じフォルダに保存されます  
-  By default, output files are saved to the same folder as the source `.icd` file.
+`ICDConverter.exe`にはiCAD SX本体や、iCAD SX付属の変換プログラムは含まれていません。変換を実行するPCに、正規のiCAD SX環境が必要です。
 
----
+## 起動方法
 
-## 🛠 使用方法 / Usage
+1. このリポジトリから`ICDConverter.exe`をダウンロードします。
+2. `ICDConverter.exe`をダブルクリックします。
+3. 初回起動後、左側の`設定`を開いてiCAD SXの検出状態を確認します。
+4. `ファイル変換`画面へファイルを追加し、`変換開始`を押します。
 
-1. アプリを起動します。  
-   Launch the application.
+署名されていないEXEのため、Windows Defender SmartScreenに発行元不明の警告が表示される場合があります。
 
-2. 上部の変換モードから `STEP` または `Parasolid` を選択します。  
-   Select the desired conversion mode (STEP or Parasolid).
+## 対応する変換
 
-3. `.icd`ファイルを画面にドラッグ・アンド・ドロップします。  
-   Drag and drop the `.icd` file onto the application window.
+| 変換モード | 入力 | 出力 |
+|---|---|---|
+| ICD → STEP | `.icd` | STEP |
+| ICD → Parasolid | `.icd` | `.x_b` / `.x_t` / `.xmt_bin` / `.xmt_txt` |
+| STEP / Parasolid → ICD | `.stp` / `.step` / `.x_b` / `.x_t` / `.xmt_bin` / `.xmt_txt` | `.icd` |
+| CATIA → ICD | `.catpart` / `.catproduct` | `.icd` |
+| ICD → DWG / DXF / DXB | `.icd` | `.dwg` / `.dxf` / `.dxb` |
+| DWG / DXF → ICD | `.dwg` / `.dxf` | `.icd` |
+| ICD → PDF | `.icd` | `.pdf` |
 
-4. 出力先フォルダを選択し、「変換」ボタンを押してください。  
-   Choose an output folder and click the **Convert** button.
+ファイルをドラッグ・アンド・ドロップすると、拡張子から利用可能な変換モードを自動判定します。同じ拡張子に複数の変換候補がある場合は、その候補だけが選択肢として表示されます。
 
----
+## iCAD SXの検出
 
-## 📁 出力ファイルについて / Output File
+アプリは次の順番でiCAD SXのインストールフォルダーを検索します。
 
-- `.stp`（STEP形式）または `.x_t`（Parasolid形式）で保存されます。  
-- 元ファイルと同じフォルダ内に保存されます（変更可能）。
+1. 設定画面で保存したフォルダー
+2. 環境変数`ICADDIR`
+3. `C:\ICADSX`
 
----
+必要な変換プログラムが見つからない場合、該当モードは変換候補に表示されません。`設定`画面には、不足しているEXE名と利用可能なモード数が表示されます。
 
-## 🧩 開発環境 / Development
+## 変換オプション
 
-- 対応フォーマット: `.icd`, `.stp`, `.x_t`  
-- 対応OS: Windows  
-- 開発言語: python
----
+- STEP精度: `0（標準精度）` / `2（高精度・推奨）`
+- Parasolidバージョン: 最新自動選択、R20からR29
+- Parasolid出力形式: AUTO、`.x_b`、`.x_t`、`.xmt_bin`、`.xmt_txt`
+- 2D出力形式とCADバージョン
+- PDFプロッター番号とPDFCreator AutoSaveフォルダー
+- 出力先フォルダー
 
-## 📜 ライセンス / License
+詳細オプションとiCAD SXフォルダーは`%LOCALAPPDATA%\ICDConverter\settings.json`へ保存されます。ウィンドウを閉じた後やWindows再起動後も設定は保持されます。
 
-このプロジェクトは [MIT License](LICENSE) の下でライセンスされています。
+## ランチャー
 
----
+よく使用するファイルやフォルダーを四角いタイルとして登録できます。タイルをクリックすると、Windowsの既定アプリまたはエクスプローラーで対象を開きます。
 
-## 📬 お問い合わせ / Contact
+## PDF変換
 
-フィードバックや不具合報告は [Issues]() にてご連絡ください。
+`ICD → PDF`は、iCAD SXの`SXPLOT.exe`とPDFCreatorを使用します。
 
----
+1. PDFCreatorでAutoSaveを有効にします。
+2. PDFCreatorの保存先と、アプリの`AutoSave先`を同じフォルダーに設定します。
+3. PDFCreatorを割り当てたiCAD SXのプロッター番号を指定します。
+
+アプリはSXPLOT実行後に新しいPDFを最大20秒待機し、指定した出力先へ移動します。
+
+## トラブルシューティング
+
+- 変換モードが表示されない: `設定`画面でiCAD SXフォルダーと不足EXEを確認してください。
+- ドラッグ・アンド・ドロップできない: エクスプローラーとアプリの実行権限を揃えるか、`ファイルを選択`を使用してください。
+- PDFが作成されない: PDFCreatorのAutoSave設定、保存先、プロッター番号を確認してください。
+- 変換に失敗する: `詳細ログ`に表示される標準エラー出力とiCAD SXの終了コードを確認してください。
+
+## 配布ファイル
+
+- ファイル: `ICDConverter.exe`
+- 対象: Windows x64
+- 形式: .NET 8 self-contained / single-file
+- SHA-256: `3BDF9C19B4242AAA672C99017CBE107423F544B3A8F02E9C90019416339C44A2`
+
+不具合や改善要望は[Issues](https://github.com/rilong5214/.icd-conversion-app/issues)へ登録してください。
