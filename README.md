@@ -80,8 +80,9 @@ UIと変換制御はC#、Avalonia 12.1、.NET 8で実装されています。配
 ## 配布ファイル
 
 - ファイル: `ICDConverter.exe`
+- サイズ: 45.03 MiB
 - 対象: Windows x64
 - 形式: .NET 8 self-contained / single-file
-- SHA-256: `3BDF9C19B4242AAA672C99017CBE107423F544B3A8F02E9C90019416339C44A2`
+- SHA-256: `63BF07F6FABE6DDE1368A28C292E858F65B098AEC20FC88599E5D6081AD91EC4`
 
 不具合や改善要望は[Issues](https://github.com/rilong5214/.icd-conversion-app/issues)へ登録してください。
